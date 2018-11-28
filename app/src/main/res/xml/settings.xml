@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:defaultValue="false"
+        android:key="@string/localremoteKey"
+        android:summary="Turn this option to Local or Remote"
+        android:title="Enable Local or Remote Server"
+        />
+
+    <android.support.v7.preference.EditTextPreference
+        android:defaultValue="@string/default_server_config"
+        android:key="@string/serverKey"
+        android:summary="Enter the Server Address that you wish to use for the Moving Goods App"
+        android:title="Server Address"
+        />
+
+    <android.support.v7.preference.EditTextPreference
+        android:defaultValue="@string/default_port_config"
+        android:key="@string/portKey"
+        android:summary="Enter the Server Port that you wish to use fo the Moving Goods App"
+        android:title="Server Port" />
+
+</android.support.v7.preference.PreferenceScreen>

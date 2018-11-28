@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Moving Goods App POC</string>
+    <string name="Loader">Loader</string>
+    <string name="CustOrder">Cust.Order</string>
+    <string name="CustReceipt">Cust.Receipt</string>
+    <string name="place_order_button_text">Place Order</string>
+    <string name="customer_order_screen_label">Customer Order</string>
+    <string name="loader_screen_label">Loader Fulfillment</string>
+    <string name="unfulfilled_orders_label">Unfullfilled Orders</string>
+    <string name="Open">OPEN Locker</string>
+    <string name="fulfill_order_button_text">Fulfill Order</string>
+    <string name="customer_receipt_screen_label">Customer Receipt</string>
+    <string name="customer_receipt_orders_label">Customer Order</string>
+    <string name="customer_identification_screen_label">Customer Identification</string>
+    <string name="customer_identification_spinner_label">Customer Login/Selection</string>
+    <string name="CustID">Cust.ID</string>
+    <string name="default_server_config">localhost</string>
+    <string name="default_port_config">5056</string>
+    <string name="localremoteKey">local_remote_flag</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="portKey">port_config</string>
+    <string name="serverKey">server_config</string>
+</resources>
