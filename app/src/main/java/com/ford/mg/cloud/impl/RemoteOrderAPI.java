@@ -91,7 +91,7 @@ public class RemoteOrderAPI implements OrderIF {
 
         sb.append(open)
                 .append(quote)
-                .append(Constants.METHOD_NAME)
+                .append(Constants.METHOD_LABEL)
                 .append(quote)
                 .append(seperator)
                 .append(quote)
