@@ -42,7 +42,7 @@ public class AsyncPlaceOrder extends AsyncTask<String,Void,OrderDTO> {
     @Override
     protected OrderDTO doInBackground(String... strings) {
         OrderDTO result;
-        String methodTag = TAG + "doInBackground";
+        String methodTag = TAG + ".doInBackground";
         if (strings.length > 1 )
             Log.d(methodTag,"More than one String passed in as CustomerID, only processing first [0]th element");
         String customerID = strings[0];
@@ -68,6 +68,8 @@ public class AsyncPlaceOrder extends AsyncTask<String,Void,OrderDTO> {
     @Override
     protected void onPostExecute(OrderDTO orderDTO) {
         super.onPostExecute(orderDTO);
+        String methodTAG = TAG +".onPostExecute";
+        Log.d(methodTAG, orderDTO.toString());
         EditText orderNumber = activity.findViewById(R.id.customer_order_order_number);
         orderNumber.setText(String.valueOf(orderDTO.getOrderNumber()));    }
 }

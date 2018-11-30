@@ -26,13 +26,23 @@ public class RemoteOrderAPI implements OrderIF {
     private PrintWriter streamOut = null;
     private BufferedReader streamIn;
 
+
+    private String server;
+    private int port;
+
+    public RemoteOrderAPI(String server, int port) {
+        this.server = server;
+        this.port = port;
+    }
+
+
     @Override
     public OrderDTO order(String customerID) {
         String methodTAG = TAG + " order";
         String line;
         System.out.println("Establishing connection. Please wait ...");
         try {
-            socket = new Socket(Constants.SERVER_IP, Constants.SERVER_PORT);
+            socket = new Socket(server, port);
             System.out.println("Connected: " + socket);
             start();
         } catch (UnknownHostException uhe) {

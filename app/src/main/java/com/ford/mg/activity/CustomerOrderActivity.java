@@ -47,10 +47,8 @@ public class CustomerOrderActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     public void onClickPlaceOrder(View view) {
         String methodTAG = TAG + "onClickPlaceOrder";
-
         String customer = Customers.getInstance().getCurrentCustomer();
         AsyncPlaceOrder asyncPlaceOrder = new AsyncPlaceOrder(this, APIFactory.getOrderAPI(this));
         asyncPlaceOrder.execute(customer);

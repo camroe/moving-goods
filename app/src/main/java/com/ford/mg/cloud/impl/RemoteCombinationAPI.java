@@ -28,6 +28,8 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
     private BufferedReader console = null;
     private PrintWriter streamOut = null;
     private BufferedReader streamIn;
+    private String server;
+    private int port;
 
     private String quote = "\"";
     private String open = "{";
@@ -35,6 +37,10 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
     String comma = ",";
     private String seperator = ":";
 
+public RemoteCombinationAPI (String server, int port){
+    this.server=server;
+    this.port = port;
+}
 
     @Override
     public List<OrderDTO> getOrders(String customerID) {
@@ -174,7 +180,7 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
         String methodTAG = TAG + ".getResponse";
         System.out.println("Establishing connection. Please wait ...");
         try {
-            socket = new Socket(Constants.SERVER_IP, Constants.SERVER_PORT);
+            socket = new Socket(server, port);
             System.out.println("Connected: " + socket);
             start();
         } catch (UnknownHostException uhe) {

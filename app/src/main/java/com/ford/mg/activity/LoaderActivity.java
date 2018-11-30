@@ -13,9 +13,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cam.activityswitcher.R;
-import com.ford.mg.BO.Order;
+import com.ford.mg.asynchronous.AsyncFindOrder;
 import com.ford.mg.cloud.IF.OrderCombinationIF;
 import com.ford.mg.cloud.impl.LocalOrderCombinationAPI;
+import com.ford.mg.factory.APIFactory;
 
 public class LoaderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -52,24 +53,28 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String methodTAG = TAG + "." + "onItemSelected";
         Integer itemSelected = (Integer) parent.getItemAtPosition(position);
-        Order order = orderCombinationAPI.find(itemSelected);
-        if (null == order) {
-            Log.d(methodTAG, "*************** Error ****************");
-            Log.d(methodTAG, "Selected OrderID not found " + itemSelected);
-        } else {
-            Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
-            EditText vehicleID = findViewById(R.id.loader_vehicle_id);
-            vehicleID.setText(order.getVehicle());
-            EditText lockerID = findViewById(R.id.loader_locker_id);
-            lockerID.setText(String.valueOf(order.getLocker()));
-            EditText combination = findViewById(R.id.loader_combination);
-            combination.setText(order.getCombination());
-        }
+        AsyncFindOrder asyncFindOrder = new AsyncFindOrder(this, APIFactory.getOrderCombinationAPI(this));
+        asyncFindOrder.execute(itemSelected);
+
+        //Old code before async
+//        Order order = orderCombinationAPI.find(itemSelected);
+//        if (null == order) {
+//            Log.d(methodTAG, "*************** Error ****************");
+//            Log.d(methodTAG, "Selected OrderID not found " + itemSelected);
+//        } else {
+//            Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
+//            EditText vehicleID = findViewById(R.id.loader_vehicle_id);
+//            vehicleID.setText(order.getVehicle());
+//            EditText lockerID = findViewById(R.id.loader_locker_id);
+//            lockerID.setText(String.valueOf(order.getLocker()));
+//            EditText combination = findViewById(R.id.loader_combination);
+//            combination.setText(order.getCombination());
+//        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        //TODO: Implement LoaderActivity:onNonthingSelected
+        //TODO: Implement LoaderActivity:onNothingSelected
         String methodTAG = TAG + "onNothingSelected";
         Log.d(methodTAG, "Called but method is unimplemented");
     }
