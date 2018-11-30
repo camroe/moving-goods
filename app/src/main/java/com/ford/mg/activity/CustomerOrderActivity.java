@@ -1,6 +1,5 @@
 package com.ford.mg.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,13 +14,10 @@ import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
 import com.ford.mg.DTO.CustomerDTO;
 import com.ford.mg.asynchronous.AsyncPlaceOrder;
-import com.ford.mg.cloud.IF.OrderIF;
-import com.ford.mg.cloud.impl.LocalOrderAPI;
-import com.ford.mg.cloud.impl.RemoteOrderAPI;
+import com.ford.mg.factory.APIFactory;
 
 public class CustomerOrderActivity extends AppCompatActivity {
     String TAG = this.getClass().getCanonicalName();
-    OrderIF orderAPI;
     SharedPreferences preferences;
     EditText orderNumber;
 
@@ -30,20 +26,7 @@ public class CustomerOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String methodTag = TAG + ":onCreate";
         Log.d(methodTag, "CALLED ...");
-        preferences = this.getPreferences(Context.MODE_PRIVATE);
         setContentView(R.layout.activity_customerorder);
-        Log.d(methodTag, preferences
-                .getString(this.getString(R.string.localremoteKey), "true"));
-        boolean localFlag = preferences.getBoolean(this.getString(R.string.localremoteKey), true);
-        Log.d(methodTag, "Value of boolean localflag is: " + localFlag);
-        if (localFlag) {
-            orderAPI = new LocalOrderAPI();
-            Log.d(methodTag,"LOCAL API CREATED");
-        }
-        else {
-            orderAPI = new RemoteOrderAPI();
-            Log.d(methodTag,"REMOTE API CREATED");
-        }
         orderNumber = findViewById(R.id.customer_order_order_number);
     }
 
@@ -52,16 +35,6 @@ public class CustomerOrderActivity extends AppCompatActivity {
         super.onStart();
         String methodTag = TAG + ":onStart";
         Log.d(methodTag, "CALLED ...");
-        boolean localFlag = preferences.getBoolean(this.getString(R.string.localremoteKey), true);
-        Log.d(methodTag, "Value of boolean localflag is: " + localFlag);
-        if (localFlag) {
-            orderAPI = new LocalOrderAPI();
-            Log.d(methodTag,"LOCAL API CREATED");
-        }
-        else {
-            orderAPI = new RemoteOrderAPI();
-            Log.d(methodTag,"REMOTE API CREATED");
-        }
     }
 
     public void onClickSwitchToCustomerIdentificationActivity(View view) {
@@ -79,14 +52,9 @@ public class CustomerOrderActivity extends AppCompatActivity {
         String methodTAG = TAG + "onClickPlaceOrder";
 
         String customer = Customers.getInstance().getCurrentCustomer();
-        AsyncPlaceOrder asyncPlaceOrder = new AsyncPlaceOrder(this,orderAPI);
+        AsyncPlaceOrder asyncPlaceOrder = new AsyncPlaceOrder(this, APIFactory.getOrderAPI(this));
         asyncPlaceOrder.execute(customer);
-        //Moved to async class do in background
-//        OrderDTO orderDTO = orderAPI.order(customer);
-        //update of ui moved to postResponse part of async task.
-//        EditText orderNumber = findViewById(R.id.customer_order_order_number);
-//        orderNumber.setText(String.valueOf(orderDTO.getOrderNumber()));
-        displayCloudMessage();
+//        displayCloudMessage();
     }
 
     private void displayCloudMessage() {
