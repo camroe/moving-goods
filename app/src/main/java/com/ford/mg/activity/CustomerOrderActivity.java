@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
 import com.ford.mg.DTO.CustomerDTO;
-import com.ford.mg.DTO.OrderDTO;
+import com.ford.mg.asynchronous.AsyncPlaceOrder;
 import com.ford.mg.cloud.IF.OrderIF;
 import com.ford.mg.cloud.impl.LocalOrderAPI;
 import com.ford.mg.cloud.impl.RemoteOrderAPI;
@@ -23,6 +23,7 @@ public class CustomerOrderActivity extends AppCompatActivity {
     String TAG = this.getClass().getCanonicalName();
     OrderIF orderAPI;
     SharedPreferences preferences;
+    EditText orderNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class CustomerOrderActivity extends AppCompatActivity {
             orderAPI = new RemoteOrderAPI();
             Log.d(methodTag,"REMOTE API CREATED");
         }
+        orderNumber = findViewById(R.id.customer_order_order_number);
     }
 
     @Override
@@ -77,9 +79,13 @@ public class CustomerOrderActivity extends AppCompatActivity {
         String methodTAG = TAG + "onClickPlaceOrder";
 
         String customer = Customers.getInstance().getCurrentCustomer();
-        OrderDTO orderDTO = orderAPI.order(customer);
-        EditText orderNumber = findViewById(R.id.customer_order_order_number);
-        orderNumber.setText(String.valueOf(orderDTO.getOrderNumber()));
+        AsyncPlaceOrder asyncPlaceOrder = new AsyncPlaceOrder(this,orderAPI);
+        asyncPlaceOrder.execute(customer);
+        //Moved to async class do in background
+//        OrderDTO orderDTO = orderAPI.order(customer);
+        //update of ui moved to postResponse part of async task.
+//        EditText orderNumber = findViewById(R.id.customer_order_order_number);
+//        orderNumber.setText(String.valueOf(orderDTO.getOrderNumber()));
         displayCloudMessage();
     }
 
