@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.DTO.OrderDTO;
-import com.ford.mg.cloud.IF.OrderIF;
+import com.ford.mg.services.IF.OrderIF;
 
 /**
  * Params,Progress,Result
@@ -44,7 +44,7 @@ public class AsyncPlaceOrder extends AsyncTask<String,Void,OrderDTO> {
         OrderDTO result;
         String methodTag = TAG + ".doInBackground";
         if (strings.length > 1 )
-            Log.d(methodTag,"More than one String passed in as CustomerID, only processing first [0]th element");
+            Log.d(methodTag, "More than one String passed in as CustomerID, only processing first ([0]th) element");
         String customerID = strings[0];
         if ((null == customerID) || customerID.equals(""))
             Log.i(methodTag,"CustomerID is null or blank:" + customerID);

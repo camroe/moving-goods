@@ -7,7 +7,7 @@ import android.widget.EditText;
 
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Order;
-import com.ford.mg.cloud.IF.OrderCombinationIF;
+import com.ford.mg.services.IF.OrderCombinationIF;
 
 public class AsyncFindOrder extends AsyncTask<Integer, Void, Order> {
     public static final String TAG = AsyncFindOrder.class.getCanonicalName();

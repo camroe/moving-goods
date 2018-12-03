@@ -1,10 +1,10 @@
-package com.ford.mg.cloud.impl;
+package com.ford.mg.services.impl;
 
 import com.ford.mg.BO.Order;
 import com.ford.mg.BO.Orders;
 import com.ford.mg.BO.SortByOrderNumber;
 import com.ford.mg.DTO.OrderDTO;
-import com.ford.mg.cloud.IF.OrderCombinationIF;
+import com.ford.mg.services.IF.OrderCombinationIF;
 
 import java.util.ArrayList;
 import java.util.Collections;

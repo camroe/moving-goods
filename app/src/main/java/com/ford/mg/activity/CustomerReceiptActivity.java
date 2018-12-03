@@ -15,8 +15,8 @@ import android.widget.Toast;
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
 import com.ford.mg.BO.Order;
-import com.ford.mg.cloud.IF.OrderCombinationIF;
-import com.ford.mg.cloud.impl.LocalOrderCombinationAPI;
+import com.ford.mg.services.IF.OrderCombinationIF;
+import com.ford.mg.services.impl.LocalOrderCombinationAPI;
 
 public class CustomerReceiptActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String TAG = LoaderActivity.class.getName();

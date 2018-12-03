@@ -1,4 +1,4 @@
-package com.ford.mg.fragments;
+package com.ford.mg.activity.fragments;
 
 
 import android.os.Bundle;

@@ -14,7 +14,7 @@ import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
 import com.ford.mg.DTO.CustomerDTO;
 import com.ford.mg.asynchronous.AsyncPlaceOrder;
-import com.ford.mg.factory.APIFactory;
+import com.ford.mg.services.factory.APIFactory;
 
 public class CustomerOrderActivity extends AppCompatActivity {
     String TAG = this.getClass().getCanonicalName();

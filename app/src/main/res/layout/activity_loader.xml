@@ -169,7 +169,7 @@
         android:id="@+id/fulfill_order_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickFufillOrder"
+        android:onClick="onClickFulfillOrder"
         android:text="@string/fulfill_order_button_text"
         android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"

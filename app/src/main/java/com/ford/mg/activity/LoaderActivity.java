@@ -14,14 +14,16 @@ import android.widget.Toast;
 
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.asynchronous.AsyncFindOrder;
-import com.ford.mg.cloud.IF.OrderCombinationIF;
-import com.ford.mg.cloud.impl.LocalOrderCombinationAPI;
-import com.ford.mg.factory.APIFactory;
+import com.ford.mg.asynchronous.AsyncFullfill;
+import com.ford.mg.services.IF.OrderCombinationIF;
+import com.ford.mg.services.factory.APIFactory;
+import com.ford.mg.services.impl.LocalOrderCombinationAPI;
 
 public class LoaderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    String TAG = LoaderActivity.class.getName();
-    OrderCombinationIF orderCombinationAPI;
+    public static final String TAG = LoaderActivity.class.getName();
+    private OrderCombinationIF orderCombinationAPI;
+    private Spinner unfulfilledOrderSpinner;
 
 
     public void onClickSwitchToCustomerOrderActivity(View view) {
@@ -80,8 +82,8 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
 
-    public void onClickFufillOrder(View view) {
-        String methodTAG = TAG + "." + "onClickFufillOrder";
+    public void onClickFulfillOrder(View view) {
+        String methodTAG = TAG + "." + "onClickFulfillOrder";
         Spinner orderSpinner = (Spinner) findViewById(R.id.unfulfilled_order_spinner);
 
         Log.d(methodTAG, Integer.toString(orderSpinner.getSelectedItemPosition()));
@@ -89,7 +91,10 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
         if (orderSpinner.getSelectedItemPosition() < 0) {
             noSelectionError();
         } else {
-            orderCombinationAPI.fulfill(Integer.valueOf(orderSpinner.getSelectedItem().toString()));
+            AsyncFullfill asyncFullfill = new AsyncFullfill(APIFactory.getOrderCombinationAPI(this));
+            asyncFullfill.execute((Integer) unfulfilledOrderSpinner.getSelectedItem());
+            // Old Code
+            // orderCombinationAPI.fulfill(Integer.valueOf(orderSpinner.getSelectedItem().toString()));
         }
         clearData("");
         recreate();
@@ -122,10 +127,12 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void setSpinner() {
-        String methodTAG = TAG + "." + "setSpinner";
-        Spinner unfulfilledOrderSpinner = findViewById(R.id.unfulfilled_order_spinner);
-
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getApplicationContext(), android.R.layout.simple_spinner_item, orderCombinationAPI.getUnfulfilledOrderIDs());
+        String methodTAG = TAG + ".setSpinner";
+        unfulfilledOrderSpinner = findViewById(R.id.unfulfilled_order_spinner);
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getApplicationContext(),
+                android.R.layout.simple_spinner_item,
+                //TODO:Make Async
+                orderCombinationAPI.getUnfulfilledOrderIDs());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unfulfilledOrderSpinner.setAdapter(adapter);
         if (unfulfilledOrderSpinner.getAdapter().isEmpty()) {

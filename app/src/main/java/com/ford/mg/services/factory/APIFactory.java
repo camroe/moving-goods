@@ -1,4 +1,4 @@
-package com.ford.mg.factory;
+package com.ford.mg.services.factory;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,13 +6,13 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.cam.activityswitcher.R;
-import com.ford.mg.cloud.IF.OrderCombinationIF;
-import com.ford.mg.cloud.IF.OrderIF;
-import com.ford.mg.cloud.impl.LocalOrderAPI;
-import com.ford.mg.cloud.impl.LocalOrderCombinationAPI;
-import com.ford.mg.cloud.impl.RemoteCombinationAPI;
-import com.ford.mg.cloud.impl.RemoteOrderAPI;
 import com.ford.mg.constant.Constants;
+import com.ford.mg.services.IF.OrderCombinationIF;
+import com.ford.mg.services.IF.OrderIF;
+import com.ford.mg.services.impl.LocalOrderAPI;
+import com.ford.mg.services.impl.LocalOrderCombinationAPI;
+import com.ford.mg.services.impl.RemoteCombinationAPI;
+import com.ford.mg.services.impl.RemoteOrderAPI;
 
 public class APIFactory {
     public static final String TAG = APIFactory.class.getCanonicalName();
