@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.asynchronous.AsyncFindOrder;
 import com.ford.mg.asynchronous.AsyncFullfill;
+import com.ford.mg.asynchronous.AsyncGetUnFulfilledOrders;
 import com.ford.mg.services.IF.OrderCombinationIF;
 import com.ford.mg.services.factory.APIFactory;
 import com.ford.mg.services.impl.LocalOrderCombinationAPI;
@@ -100,7 +100,7 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
         recreate();
     }
 
-    private void clearData(String clearString) {
+    public void clearData(String clearString) {
         EditText vehicleID = findViewById(R.id.loader_vehicle_id);
         vehicleID.setText(clearString);
         EditText lockerID = findViewById(R.id.loader_locker_id);
@@ -129,20 +129,24 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     private void setSpinner() {
         String methodTAG = TAG + ".setSpinner";
         unfulfilledOrderSpinner = findViewById(R.id.unfulfilled_order_spinner);
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,
-                //TODO:Make Async
-                orderCombinationAPI.getUnfulfilledOrderIDs());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        unfulfilledOrderSpinner.setAdapter(adapter);
-        if (unfulfilledOrderSpinner.getAdapter().isEmpty()) {
-            Log.d(methodTAG, "Loader Spinner is EMPTY");
-            String clearString = "";
-            clearData(clearString);
-        }
-        unfulfilledOrderSpinner.setOnItemSelectedListener(this);
+        AsyncGetUnFulfilledOrders asyncGetUnFulfilledOrders = new AsyncGetUnFulfilledOrders(this, orderCombinationAPI);
+        asyncGetUnFulfilledOrders.execute();
+//      OLD CODE
+//        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getApplicationContext(),
+//                android.R.layout.simple_spinner_item,
+//                orderCombinationAPI.getUnfulfilledOrderIDs());
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        unfulfilledOrderSpinner.setAdapter(adapter);
+//        if (unfulfilledOrderSpinner.getAdapter().isEmpty()) {
+//            Log.d(methodTAG, "Loader Spinner is EMPTY");
+//            String clearString = "";
+//            clearData(clearString);
+//        }
+//        unfulfilledOrderSpinner.setOnItemSelectedListener(this);
     }
 
-
+    public Spinner getUnfulfilledOrderSpinner() {
+        return unfulfilledOrderSpinner;
+    }
 }
 
