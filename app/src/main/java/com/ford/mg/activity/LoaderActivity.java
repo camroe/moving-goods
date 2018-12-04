@@ -12,9 +12,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cam.activityswitcher.R;
-import com.ford.mg.asynchronous.AsyncFindOrder;
 import com.ford.mg.asynchronous.AsyncFullfill;
 import com.ford.mg.asynchronous.AsyncGetUnFulfilledOrders;
+import com.ford.mg.asynchronous.AsyncLoaderFindOrder;
 import com.ford.mg.services.IF.OrderCombinationIF;
 import com.ford.mg.services.factory.APIFactory;
 import com.ford.mg.services.impl.LocalOrderCombinationAPI;
@@ -55,8 +55,8 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String methodTAG = TAG + "." + "onItemSelected";
         Integer itemSelected = (Integer) parent.getItemAtPosition(position);
-        AsyncFindOrder asyncFindOrder = new AsyncFindOrder(this, APIFactory.getOrderCombinationAPI(this));
-        asyncFindOrder.execute(itemSelected);
+        AsyncLoaderFindOrder asyncLoaderFindOrder = new AsyncLoaderFindOrder(this, APIFactory.getOrderCombinationAPI(this));
+        asyncLoaderFindOrder.execute(itemSelected);
 
         //Old code before async
 //        Order order = orderCombinationAPI.find(itemSelected);

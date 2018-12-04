@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
-import com.ford.mg.BO.Order;
+import com.ford.mg.asynchronous.AsyncCustomerReceiptFindOrder;
 import com.ford.mg.services.IF.OrderCombinationIF;
 import com.ford.mg.services.impl.LocalOrderCombinationAPI;
 
@@ -36,6 +36,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
 
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getApplicationContext(),
                 android.R.layout.simple_spinner_item,
+                //TODO:MAKE ASYNC
                 orderCombinationAPI.getOrderIDs(Customers.getInstance().getCurrentCustomer()));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         customerReceiptOrderSpinner.setAdapter(adapter);
@@ -61,17 +62,20 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String methodTAG = TAG + "." + "onItemSelected";
         Integer itemSelected = (Integer) parent.getItemAtPosition(position);
-        Order order = orderCombinationAPI.find(itemSelected);
-        if (null == order) {
-            Log.d(methodTAG, "*************** Error ****************");
-            Log.d(methodTAG, "Selected OrderID not found " + itemSelected);
-        } else {
-            Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
-            EditText vehicleID = findViewById(R.id.customer_receipt_vehicle_id);
-            vehicleID.setText(order.getVehicle());
-            EditText combination = findViewById(R.id.customer_receipt_combination);
-            combination.setText(order.getCombination());
-        }
+        AsyncCustomerReceiptFindOrder asyncCustomerReceiptFindOrder = new AsyncCustomerReceiptFindOrder(this, orderCombinationAPI);
+        asyncCustomerReceiptFindOrder.execute(itemSelected);
+        //OLD CODE
+//        Order order = orderCombinationAPI.find(itemSelected);
+//        if (null == order) {
+//            Log.d(methodTAG, "*************** Error ****************");
+//            Log.d(methodTAG, "Selected OrderID not found " + itemSelected);
+//        } else {
+//            Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
+//            EditText vehicleID = findViewById(R.id.customer_receipt_vehicle_id);
+//            vehicleID.setText(order.getVehicle());
+//            EditText combination = findViewById(R.id.customer_receipt_combination);
+//            combination.setText(order.getCombination());
+//        }
     }
 
     @Override

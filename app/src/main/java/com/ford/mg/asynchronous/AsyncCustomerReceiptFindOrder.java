@@ -9,13 +9,13 @@ import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Order;
 import com.ford.mg.services.IF.OrderCombinationIF;
 
-public class AsyncFindOrder extends AsyncTask<Integer, Void, Order> {
-    public static final String TAG = AsyncFindOrder.class.getCanonicalName();
+public class AsyncCustomerReceiptFindOrder extends AsyncTask<Integer, Void, Order> {
+    public static final String TAG = AsyncCustomerReceiptFindOrder.class.getCanonicalName();
     private OrderCombinationIF orderImpl;
     private Activity activity;
 
 
-    public AsyncFindOrder(Activity callingActivity, OrderCombinationIF orderImpl) {
+    public AsyncCustomerReceiptFindOrder(Activity callingActivity, OrderCombinationIF orderImpl) {
         this.activity = callingActivity;
         this.orderImpl = orderImpl;
     }
@@ -40,11 +40,9 @@ public class AsyncFindOrder extends AsyncTask<Integer, Void, Order> {
         super.onPostExecute(order);
         String methodTAG = TAG + ".onPostExecute";
         Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
-        EditText vehicleID = activity.findViewById(R.id.loader_vehicle_id);
+        EditText vehicleID = activity.findViewById(R.id.customer_receipt_vehicle_id);
         vehicleID.setText(order.getVehicle());
-        EditText lockerID = activity.findViewById(R.id.loader_locker_id);
-        lockerID.setText(String.valueOf(order.getLocker()));
-        EditText combination = activity.findViewById(R.id.loader_combination);
+        EditText combination = activity.findViewById(R.id.customer_receipt_combination);
         combination.setText(order.getCombination());
     }
 }
