@@ -18,23 +18,12 @@ import com.example.cam.activityswitcher.R;
 public class SettingsFragment extends PreferenceFragmentCompat {
     private String TAG = SettingsFragment.class.getCanonicalName();
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, String s) {
 //        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
-        System.out.println("ON CREATE");
-        showPreferences();
-    }
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        addPreferencesFromResource(R.xml.settings);
-//    }
-
+        setPreferencesFromResource(R.xml.settings,s);
+        System.out.println("ON CREATE Preferences");
+        showPreferences();    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -42,10 +31,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        showPreferences();
+    }
+
     private void showPreferences() {
-        SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference("localremoteKey");
-        EditTextPreference server = (EditTextPreference) findPreference("serverKey");
-        EditTextPreference port = (EditTextPreference) findPreference("portKey");
+        SwitchPreferenceCompat switchPreference = (SwitchPreferenceCompat) findPreference(this.getString(R.string.localremoteKey));
+        EditTextPreference server = (EditTextPreference) findPreference(getString(R.string.serverKey));
+        EditTextPreference port = (EditTextPreference) findPreference(getString(R.string.portKey));
         System.out.println();
         if (null != switchPreference)
             System.out.println(":ISCHECKED: " + switchPreference.isChecked());
@@ -61,21 +56,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             System.out.println("PORT is NULL");
         System.out.println();
     }
-
-    @Override
-    public void onStart() {
-        System.out.println("ON_START:PREFERENCES (MAIN WINDOW):");
-        showPreferences();
-        System.out.flush();
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        System.out.println("ON_RESUME:PREFERENCES (MAIN WINDOW):");
-        showPreferences();
-        System.out.flush();
-        super.onResume();
-    }
-
 }

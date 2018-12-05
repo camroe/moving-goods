@@ -15,11 +15,9 @@ import android.widget.Spinner;
 
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
-import com.ford.mg.constant.Preferences;
 
 public class CustomerIdentification extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String TAG = CustomerIdentification.class.getName();
-    Preferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,6 @@ public class CustomerIdentification extends AppCompatActivity implements Adapter
         EditText current_customer_identification = findViewById(R.id.current_customer_identification);
         current_customer_identification.setText(Customers.getInstance().getCurrentCustomer());
         setSpinner();
-        preferences = Preferences.getInstance(this);
     }
 
     @Override
@@ -70,18 +67,6 @@ public class CustomerIdentification extends AppCompatActivity implements Adapter
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    /**
-     * This is the fragment-orientated version of {@link #onResume()} that you
-     * can override to perform operations in the Activity at the same point
-     * where its fragments are resumed.  Be sure to always call through to
-     * the super-class.
-     */
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        preferences = Preferences.getInstance(this);
     }
 
     private void setSpinner() {

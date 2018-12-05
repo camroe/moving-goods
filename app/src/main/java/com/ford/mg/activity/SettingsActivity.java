@@ -2,7 +2,6 @@ package com.ford.mg.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
@@ -18,30 +17,9 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Fragment preferencesFragment = new SettingsFragment();
-        FragmentTransaction ft = getSupportFragmentManager()
-                .beginTransaction();
-        ft.replace(android.R.id.content,new SettingsFragment()).commit();
-
-//        getFragmentManager().beginTransaction()
-//                .replace(android.R.id.content, new SettingsFragment())
-//                .commit();
-    }
-
-    @Override
-    protected void onStart() {
-        System.out.println("ON_START:PREFERENCES (MAIN WINDOW):");
-        showPreferences();
-        System.out.flush();
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        System.out.println("ON_RESUME:PREFERENCES (MAIN WINDOW):");
-        showPreferences();
-        System.out.flush();
-        super.onResume();
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
     }
 
     @Override
@@ -54,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
     private void showPreferences() {
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String port = sharedPreferences.getString("portKey", null);
         Boolean switchPreference = sharedPreferences.getBoolean("localremoteKey", false);

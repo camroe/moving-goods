@@ -3,10 +3,10 @@
     xmlns:xmlns:app="http://schemas.android.com/apk/res-auto"
 
     <android.support.v7.preference.SwitchPreferenceCompat
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="@string/localremoteKey"
-        android:summary="Turn this option to Local or Remote"
-        android:title="Enable Local or Remote Server"
+        android:summary="Turn this option on to use Local processing"
+        android:title="Enable Local Server"
         />
 
     <android.support.v7.preference.EditTextPreference

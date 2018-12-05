@@ -15,14 +15,11 @@ import com.example.cam.activityswitcher.R;
 import com.ford.mg.asynchronous.AsyncFullfill;
 import com.ford.mg.asynchronous.AsyncGetUnFulfilledOrders;
 import com.ford.mg.asynchronous.AsyncLoaderFindOrder;
-import com.ford.mg.services.IF.OrderCombinationIF;
 import com.ford.mg.services.factory.APIFactory;
-import com.ford.mg.services.impl.LocalOrderCombinationAPI;
 
 public class LoaderActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = LoaderActivity.class.getName();
-    private OrderCombinationIF orderCombinationAPI;
     private Spinner unfulfilledOrderSpinner;
 
 
@@ -47,7 +44,6 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loader);
-        orderCombinationAPI = new LocalOrderCombinationAPI();
         setSpinner();
     }
 
@@ -129,7 +125,7 @@ public class LoaderActivity extends AppCompatActivity implements AdapterView.OnI
     private void setSpinner() {
         String methodTAG = TAG + ".setSpinner";
         unfulfilledOrderSpinner = findViewById(R.id.unfulfilled_order_spinner);
-        AsyncGetUnFulfilledOrders asyncGetUnFulfilledOrders = new AsyncGetUnFulfilledOrders(this, orderCombinationAPI);
+        AsyncGetUnFulfilledOrders asyncGetUnFulfilledOrders = new AsyncGetUnFulfilledOrders(this, APIFactory.getOrderCombinationAPI(this));
         asyncGetUnFulfilledOrders.execute();
 //      OLD CODE
 //        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getApplicationContext(),

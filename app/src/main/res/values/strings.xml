@@ -14,8 +14,8 @@
     <string name="customer_identification_screen_label">Customer Identification</string>
     <string name="customer_identification_spinner_label">Customer Login/Selection</string>
     <string name="CustID">Cust.ID</string>
-    <string name="default_server_config">localhost</string>
-    <string name="default_port_config">5056</string>
+    <string name="default_server_config">default_localhost</string>
+    <string name="default_port_config">666</string>
     <string name="localremoteKey">local_remote_flag</string>
 
     <!-- TODO: Remove or change this placeholder text -->

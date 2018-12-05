@@ -40,7 +40,8 @@ public class RemoteOrderAPI implements OrderIF {
     public OrderDTO order(String customerID) {
         String methodTAG = TAG + " order";
         String line;
-        System.out.println("Establishing connection. Please wait ...");
+        OrderDTO orderDTO = null;
+        System.out.println("Creating socket to '" + server + "' on port " + port);
         try {
             socket = new Socket(server, port);
             System.out.println("Connected: " + socket);
@@ -49,6 +50,7 @@ public class RemoteOrderAPI implements OrderIF {
             System.out.println("Host unknown: " + uhe.getMessage());
         } catch (IOException ioe) {
             System.out.println("Unexpected exception: " + ioe.getMessage());
+            //TODO: Add a TOAST ERROR
         }
         System.out.println("Sending .... ");
         line = buildJsonCommand(customerID);
@@ -67,7 +69,6 @@ public class RemoteOrderAPI implements OrderIF {
         }
         System.out.println(line);
         stop();
-        OrderDTO orderDTO = null;
         try {
             orderDTO = processResponse(line);
         } catch (JSONException e) {
@@ -86,7 +87,7 @@ public class RemoteOrderAPI implements OrderIF {
         order.setVehicle(json.getString(Constants.VEHICLE));
         order.setLocker(json.getInt(Constants.LOCKER));
         order.setCombination(json.getString(Constants.COMBINATION));
-        order.setState((OrderState) json.get(Constants.STATE));
+        order.setState(OrderState.valueOf(json.getString(Constants.STATE)));
 
         return new OrderDTO(order);
     }

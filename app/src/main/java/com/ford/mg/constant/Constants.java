@@ -13,7 +13,7 @@ public class Constants {
     public static final String LOCKER = "locker";
     //TODO: make these configurable
     public static final String SERVER_IP = "19.7.60.238";
-    public static final int SERVER_PORT = 5056;
+    public static final String SERVER_PORT = "5056";
 
     public static final String GET_ORDERS_METHOD = "getOrders";
     public static final String GET_UNFULFILLED_ORDERS_METHOD = "getUnfulfilledOrders";

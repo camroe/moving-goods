@@ -19,10 +19,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class RemoteCombinationAPI implements OrderCombinationIF {
+    String comma = ",";
     private String TAG = RemoteCombinationAPI.class.getCanonicalName();
     private Socket socket = null;
     private BufferedReader console = null;
@@ -30,17 +32,15 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
     private BufferedReader streamIn;
     private String server;
     private int port;
-
     private String quote = "\"";
     private String open = "{";
     private String close = "}";
-    String comma = ",";
     private String seperator = ":";
 
-public RemoteCombinationAPI (String server, int port){
-    this.server=server;
-    this.port = port;
-}
+    public RemoteCombinationAPI(String server, int port) {
+        this.server = server;
+        this.port = port;
+    }
 
     @Override
     public List<OrderDTO> getOrders(String customerID) {
@@ -114,23 +114,25 @@ public RemoteCombinationAPI (String server, int port){
     @Override
     public Order find(int orderID) {
 
-    String methodTAG = TAG + ".find";
-    String commandLine = buildJsonFindOrder(orderID);
-    String responseLine = getResponse(commandLine);
-    Order order = null;
+        String methodTAG = TAG + ".find";
+        String commandLine = buildJsonFindOrder(orderID);
+        String responseLine = getResponse(commandLine);
+        Order order = null;
         try {
-        order = processGetOrderResponse(responseLine);
-    } catch (JSONException e) {
-        Log.e(methodTAG, "Error in processing Response JSON");
-        e.printStackTrace();
-    }
+            order = processGetOrderResponse(responseLine);
+        } catch (JSONException e) {
+            Log.e(methodTAG, "Error in processing Response JSON");
+            e.printStackTrace();
+        }
         return order;
-}
+    }
 
 
     @Override
     public void orderPickedup(int orderID) {
-    //TODO: Not sure what to do here.
+        String methodTag = TAG + ".orderPickedup";
+        Log.d(methodTag, "Not sure what to do with a remote pickup when NFC is not imple yet. ");
+        //TODO: Not sure what to do here.
     }
 
     public void start() throws IOException {
@@ -155,22 +157,24 @@ public RemoteCombinationAPI (String server, int port){
         return result;
     }
 
-    private Order processGetOrderResponse(String responseLine) throws JSONException{
+    private Order processGetOrderResponse(String responseLine) throws JSONException {
         String methodTag = TAG + ".processGetOrderResponse";
         JSONObject jsonObject = new JSONObject(responseLine);
         return constructOrder(jsonObject);
-     }
+    }
 
     private List<Integer> processGetUnfulfilledOrdersResponse(String jsonString) throws JSONException {
         String methodTag = TAG + ".processGetOrdersResponse";
-        List<Integer> result = Collections.emptyList();
+        List<Integer> result = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(jsonString);
         if (jsonArray.length() == 0) {
             Log.w(methodTag, "Zero length Array received from server");
             return Collections.emptyList();
         } else {
             for (int i = 0; i < jsonArray.length(); i++) {
-                result.add(new Integer(jsonArray.getJSONObject(i).getInt(Constants.ORDER_NUMBER)));
+                result.add(new Integer(jsonArray
+                        .getJSONObject(i)
+                        .getInt(Constants.ORDER_NUMBER)));
             }
         }
         return result;
@@ -214,7 +218,7 @@ public RemoteCombinationAPI (String server, int port){
         order.setVehicle(json.getString(Constants.VEHICLE));
         order.setLocker(json.getInt(Constants.LOCKER));
         order.setCombination(json.getString(Constants.COMBINATION));
-        order.setState((OrderState) json.get(Constants.STATE));
+        order.setState(OrderState.valueOf(json.getString(Constants.STATE)));
         return order;
     }
 

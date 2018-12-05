@@ -3,6 +3,9 @@ package com.ford.mg.services.factory;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.preference.SwitchPreferenceCompat;
 import android.util.Log;
 
 import com.example.cam.activityswitcher.R;
@@ -51,13 +54,18 @@ public class APIFactory {
 
     private static void setPreferences(Activity callingActivity) {
         String methodTag = TAG + ".setPreferences";
-        SharedPreferences preferences = callingActivity.getPreferences(Context.MODE_PRIVATE);
-        Log.d(methodTag, preferences
-                .getString(callingActivity.getString(R.string.localremoteKey), "true"));
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(callingActivity.getApplicationContext());
+//        preferences = callingActivity.getPreferences(Context.MODE_PRIVATE);
+//        Log.d(methodTag, preferences
+//                .getString(callingActivity.getString(R.string.localremoteKey), "DefaultFromFactory"));
         //Get the system settings
+
+
         localFlag = preferences.getBoolean(callingActivity.getString(R.string.localremoteKey), true);
         server = preferences.getString(callingActivity.getString(R.string.serverKey), Constants.SERVER_IP);
-        port = preferences.getInt(callingActivity.getString(R.string.portKey), Constants.SERVER_PORT);
+        port =  Integer.valueOf(preferences.getString(callingActivity.getString(R.string.portKey), Constants.SERVER_PORT));
 
     }
+
+
 }

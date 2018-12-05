@@ -3,11 +3,9 @@ package com.ford.mg.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -15,37 +13,28 @@ import android.widget.Toast;
 import com.example.cam.activityswitcher.R;
 import com.ford.mg.BO.Customers;
 import com.ford.mg.asynchronous.AsyncCustomerReceiptFindOrder;
+import com.ford.mg.asynchronous.AsyncGetFulfilledOrders;
+import com.ford.mg.asynchronous.AsyncPickUP;
 import com.ford.mg.services.IF.OrderCombinationIF;
+import com.ford.mg.services.factory.APIFactory;
 import com.ford.mg.services.impl.LocalOrderCombinationAPI;
 
 public class CustomerReceiptActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     String TAG = LoaderActivity.class.getName();
-    OrderCombinationIF orderCombinationAPI;
+    Spinner customerReceiptOrderSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customerreceipt);
-        orderCombinationAPI = new LocalOrderCombinationAPI();
         setSpinner();
     }
 
     private void setSpinner() {
         String methodTAG = TAG + "." + "setSpinner";
-        Spinner customerReceiptOrderSpinner = findViewById(R.id.customer_receipt_order_spinner);
-
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item,
-                //TODO:MAKE ASYNC
-                orderCombinationAPI.getOrderIDs(Customers.getInstance().getCurrentCustomer()));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        customerReceiptOrderSpinner.setAdapter(adapter);
-        if (customerReceiptOrderSpinner.getAdapter().isEmpty()) {
-            Log.d(methodTAG, "CustomerDTO Receipt Spinner is EMPTY");
-            String clearString = "";
-            clearData(clearString);
-        }
-        customerReceiptOrderSpinner.setOnItemSelectedListener(this);
+        customerReceiptOrderSpinner = findViewById(R.id.customer_receipt_order_spinner);
+        AsyncGetFulfilledOrders asyncGetFulfilledOrders = new AsyncGetFulfilledOrders(this, APIFactory.getOrderCombinationAPI(this));
+        asyncGetFulfilledOrders.execute((String) Customers.getInstance().getCurrentCustomer());
     }
 
     public void onClickSwitchToLoaderActivity(View view) {
@@ -62,20 +51,8 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String methodTAG = TAG + "." + "onItemSelected";
         Integer itemSelected = (Integer) parent.getItemAtPosition(position);
-        AsyncCustomerReceiptFindOrder asyncCustomerReceiptFindOrder = new AsyncCustomerReceiptFindOrder(this, orderCombinationAPI);
+        AsyncCustomerReceiptFindOrder asyncCustomerReceiptFindOrder = new AsyncCustomerReceiptFindOrder(this, APIFactory.getOrderCombinationAPI(this));
         asyncCustomerReceiptFindOrder.execute(itemSelected);
-        //OLD CODE
-//        Order order = orderCombinationAPI.find(itemSelected);
-//        if (null == order) {
-//            Log.d(methodTAG, "*************** Error ****************");
-//            Log.d(methodTAG, "Selected OrderID not found " + itemSelected);
-//        } else {
-//            Log.d(methodTAG, order.getOrderNumber() + ":" + order.getVehicle() + ":" + order.getLocker() + ":" + order.getCombination());
-//            EditText vehicleID = findViewById(R.id.customer_receipt_vehicle_id);
-//            vehicleID.setText(order.getVehicle());
-//            EditText combination = findViewById(R.id.customer_receipt_combination);
-//            combination.setText(order.getCombination());
-//        }
     }
 
     @Override
@@ -89,7 +66,9 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
         if (orderSpinner.getSelectedItemPosition() < 0) {
             noSelectionError();
         } else {
-            orderCombinationAPI.orderPickedup(Integer.valueOf(orderSpinner.getSelectedItem().toString()));
+            AsyncPickUP asyncPickUP = new AsyncPickUP(APIFactory.getOrderCombinationAPI(this));
+            asyncPickUP.execute(Integer.valueOf(orderSpinner.getSelectedItem().toString()));
+//            orderCombinationAPI.orderPickedup(Integer.valueOf(orderSpinner.getSelectedItem().toString()));
             unimplemented();
             clearData("");
             recreate();
@@ -97,7 +76,7 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
 
     }
 
-    private void clearData(String clearString) {
+    public void clearData(String clearString) {
         EditText vehicleID = findViewById(R.id.customer_receipt_vehicle_id);
         vehicleID.setText(clearString);
         EditText combination = findViewById(R.id.customer_receipt_combination);
@@ -118,5 +97,9 @@ public class CustomerReceiptActivity extends AppCompatActivity implements Adapte
                 Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+
+    public Spinner getCustomerReceiptOrderSpinner() {
+        return customerReceiptOrderSpinner;
     }
 }
