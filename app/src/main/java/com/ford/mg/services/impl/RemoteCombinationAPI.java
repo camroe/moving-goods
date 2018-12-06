@@ -157,7 +157,7 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
         commandLine = buildJsonOpen(combination);
         responseLine=getResponse(commandLine);
         Log.d(methodTAG,"Response From OPEN: " + responseLine);
-        //TODO: Could Check Response Here for correctness
+        //TODO: Could Check Response Here for correctnes and errors.
     }
 
 
