@@ -131,9 +131,35 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
     @Override
     public void orderPickedup(int orderID) {
         String methodTag = TAG + ".orderPickedup";
-        Log.d(methodTag, "Not sure what to do with a remote pickup when NFC is not imple yet. ");
-        //TODO: Not sure what to do here.
+        Log.d(methodTag, "Not sure what to do with a remote pickup when NFC is not impl yet, for now simulate over the network. ");
+        //For now - simulate over the network
+        openOverNetwork(orderID);
     }
+
+    //Additional Public method  to allow simulation over the network of an "open" call.
+    //Normally this would be a NFC call
+    private void openOverNetwork (int orderID) {
+        String methodTAG = TAG + ".openOverNetwork";
+        //1. Find the order
+        String commandLine = buildJsonFindOrder(orderID);
+        String responseLine = getResponse(commandLine);
+        Order order =null;
+        try {
+            order = processGetOrderResponse(responseLine);
+        } catch (JSONException e) {
+            Log.e(methodTAG, "Error in processing Response JSON");
+            e.printStackTrace();
+            return;
+        }
+        //2.Get the Combination and send it to the server.
+        //TODO: Could to status check here to see if it has already been picked up. For now just leave it alone.
+        String combination = order.getCombination();
+        commandLine = buildJsonOpen(combination);
+        responseLine=getResponse(commandLine);
+        Log.d(methodTAG,"Response From OPEN: " + responseLine);
+        //TODO: Could Check Response Here for correctness
+    }
+
 
     public void start() throws IOException {
         console = new BufferedReader(new InputStreamReader(System.in));
@@ -367,4 +393,29 @@ public class RemoteCombinationAPI implements OrderCombinationIF {
         System.out.println("BUILT COMMAND: " + sb.toString());
         return sb.toString();
     }
+
+    //{"method":"open","combination":"12345"}
+    private String buildJsonOpen(String combination) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(open)
+                .append(quote)
+                .append(Constants.METHOD_LABEL)
+                .append(quote)
+                .append(seperator)
+                .append(quote)
+                .append(Constants.OPEN)
+                .append(quote)
+                .append(comma)
+                .append(quote)
+                .append(Constants.COMBINATION)
+                .append(quote)
+                .append(seperator)
+                .append(quote)
+                .append(combination)
+                .append(quote)
+                .append(close);
+        System.out.println("BUILT COMMAND: " + sb.toString());
+        return sb.toString();
+    }
+
 }
